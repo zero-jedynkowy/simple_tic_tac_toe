@@ -49,11 +49,12 @@ class MainWindow(QtWidgets.QMainWindow):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        game = Game()
+        self.game = Game()
         template = "self.ui.board_{}{}.mousePressEvent = self.changeContent(i, j)"
         for i in range(1, 4, 1):
             for j in range(1, 4, 1):
-                exec(template.format(i, j))   
+                exec(template.format(i, j))
+        self.changePixMapFieldBoard('current_turn', '{}_template.png'.format(self.game.currentRound))
     
     def changeContent(self, row, column):
         def clickedAction(self):
@@ -63,7 +64,8 @@ class MainWindow(QtWidgets.QMainWindow):
         return clickedAction
     
     def changePixMapFieldBoard(self, name, newContent):
-        pass
+        template = 'self.ui.{}.setPixmap(QtGui.QPixmap("{}"))'
+        exec(template.format(name, newContent))
         
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
