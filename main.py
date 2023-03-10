@@ -32,7 +32,7 @@ class Game():
             temporary1 = ''.join(self.board[i])
             if  temporary1 == 'xxx' or temporary1 == 'ooo':
                 return True
-            temporary1 = ''.join([self.board[i][x] for x in range(3)])
+            temporary1 = ''.join([self.board[x][i] for x in range(3)])
             if  temporary1 == 'xxx' or temporary1 == 'ooo':
                 return True
         temporary2 = ''.join([self.board[a][b] for (a, b) in [(0, 0), (1, 1), (2, 2)]])
@@ -57,10 +57,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.changePixMapFieldBoard('current_turn', '{}_template.png'.format(self.game.currentRound))
     
     def changeContent(self, row, column):
-        def clickedAction(self):
+        def clickedAction(event):
             nonlocal row
             nonlocal column
-            print(row, column)
+            nonlocal self
+            if self.game.changeField(row, column):
+                self.changePixMapFieldBoard('board_{}{}'.format(row, column), '{}_template.png'.format(self.game.currentRound))
+                if self.game.checkWin():
+                    exit()
+                self.game.nextTurn()
+                self.changePixMapFieldBoard('current_turn', '{}_template.png'.format(self.game.currentRound))
         return clickedAction
     
     def changePixMapFieldBoard(self, name, newContent):
