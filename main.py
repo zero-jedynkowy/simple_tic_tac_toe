@@ -10,6 +10,7 @@ class Game():
         self.players = ["x", "o"]
         self.board = [['blank', 'blank', 'blank'] for _ in range(3)]
         self.currentRound = random.choice(self.players)
+        self.counterAvailableFields = 9
 
     def resetGame(self):
         self.__init__()
@@ -19,6 +20,7 @@ class Game():
             self.currentRound = self.players[1]
         else:
             self.currentRound = self.players[0]
+        self.counterAvailableFields -= 1
 
     def changeField(self, row, column):
         row -= 1
@@ -82,6 +84,8 @@ class MainWindow(QtWidgets.QMainWindow):
                             self.changePixMapFieldBoard('board_{}{}'.format(i, j), 'blank_template.png')
                 self.game.nextTurn()
                 self.changePixMapFieldBoard('current_turn', '{}_template.png'.format(self.game.currentRound))
+            if self.game.counterAvailableFields == 0:
+                exit()
         return clickedAction
     
     def changePixMapFieldBoard(self, name, newContent):
