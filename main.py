@@ -1,6 +1,7 @@
 import tictactoe.mainWindow as mainWindow
 import tictactoe.draw_message as draw_message
 import tictactoe.win_message as win_message
+import tictactoe.about_message as about_message
 import sys
 import random
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -47,6 +48,12 @@ class Game():
             return True
         return False
 
+class AboutMessageBox(QtWidgets.QDialog):
+    def __init__(self, parent):
+        super(AboutMessageBox, self).__init__(parent)
+        self.ui = about_message.Ui_Dialog()
+        self.ui.setupUi(self)
+
 class WinMessageBox(QtWidgets.QDialog):
     def __init__(self, parent, wonPlayer):
         super(WinMessageBox, self).__init__(parent)
@@ -75,6 +82,14 @@ class MainWindow(QtWidgets.QMainWindow):
             for j in range(1, 4, 1):
                 exec(template.format(i, j))
         self.changePixMapFieldBoard('current_turn', '{}_template.png'.format(self.game.currentRound))
+        self.ui.menuUstawienia.mousePressEvent = self.aboutTheProgramme()
+    
+    def aboutTheProgramme(self):
+        def fun(event):
+            aboutDialog = AboutMessageBox(self)
+            aboutDialog.show()
+            aboutDialog.exec()
+        return fun
     
     def changeContent(self, row, column):
         def clickedAction(event):
