@@ -49,12 +49,28 @@ class Game():
         return False
 
 class AboutMessageBox(QtWidgets.QDialog):
+    counterInstances = 0
     def __init__(self, parent):
         super(AboutMessageBox, self).__init__(parent)
         self.ui = about_message.Ui_Dialog()
         self.ui.setupUi(self)
+        AboutMessageBox.counterInstances += 1
+
+    def show(self) -> None:
+        if AboutMessageBox.counterInstances == 1:
+            return super().show()
+
+    def exec(self) -> int:
+        if AboutMessageBox.counterInstances == 1:
+            return super().exec()
+        self.done(0)
+
+    def done(self, a0: int) -> None:
+        AboutMessageBox.counterInstances -= 1
+        super().done(a0)
 
 class WinMessageBox(QtWidgets.QDialog):
+    counterInstances = 0
     def __init__(self, parent, wonPlayer):
         super(WinMessageBox, self).__init__(parent)
         self.ui = win_message.Ui_Dialog()
@@ -62,13 +78,42 @@ class WinMessageBox(QtWidgets.QDialog):
         self.ui.label.setText(self.ui.label.text().format(wonPlayer))
         self.ui.pushButton.clicked.connect(self.close)
         self.setWindowTitle(self.windowTitle().format(wonPlayer))
+        WinMessageBox.counterInstances += 1
+    
+    def show(self) -> None:
+        if WinMessageBox.counterInstances == 1:
+            return super().show()
+
+    def exec(self) -> int:
+        if WinMessageBox.counterInstances == 1:
+            return super().exec()
+        self.done(0)
+
+    def done(self, a0: int) -> None:
+        WinMessageBox.counterInstances -= 1
+        super().done(a0)
 
 class DrawMessageBox(QtWidgets.QDialog):
+    counterInstances = 0
     def __init__(self, parent):
         super(DrawMessageBox, self).__init__(parent)
         self.ui = draw_message.Ui_Dialog()
         self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.close)
+        DrawMessageBox.counterInstances += 1
+
+    def show(self) -> None:
+        if DrawMessageBox.counterInstances == 1:
+            return super().show()
+
+    def exec(self) -> int:
+        if DrawMessageBox.counterInstances == 1:
+            return super().exec()
+        self.done(0)
+
+    def done(self, a0: int) -> None:
+        DrawMessageBox.counterInstances -= 1
+        super().done(a0)
 
 class MainWindow(QtWidgets.QMainWindow):
     
@@ -132,4 +177,5 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
+    print(window.children())
     sys.exit(app.exec())
