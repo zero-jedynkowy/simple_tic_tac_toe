@@ -1,5 +1,6 @@
-from interface import Ui_MainWindow
-from win_message import Ui_Dialog
+import tictactoe.mainWindow as mainWindow
+import tictactoe.draw_message as draw_message
+import tictactoe.win_message as win_message
 import sys
 import random
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -47,16 +48,26 @@ class Game():
         return False
 
 class WinMessageBox(QtWidgets.QDialog):
-    def __init__(self, parent):
+    def __init__(self, parent, wonPlayer):
         super(WinMessageBox, self).__init__(parent)
-        self.ui = Ui_Dialog()
+        self.ui = win_message.Ui_Dialog()
         self.ui.setupUi(self)
+        self.ui.label.setText(self.ui.label.text().format(wonPlayer))
+        self.ui.pushButton.clicked.connect(self.close)
+        self.setWindowTitle(self.windowTitle().format(wonPlayer))
+
+class DrawMessageBox(QtWidgets.QDialog):
+    def __init__(self, parent):
+        super(DrawMessageBox, self).__init__(parent)
+        self.ui = draw_message.Ui_Dialog()
+        self.ui.setupUi(self)
+        self.ui.pushButton.clicked.connect(self.close)
 
 class MainWindow(QtWidgets.QMainWindow):
     
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.ui = Ui_MainWindow()
+        self.ui = mainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
         self.game = Game()
         template = "self.ui.board_{}{}.mousePressEvent = self.changeContent(i, j)"
@@ -70,12 +81,11 @@ class MainWindow(QtWidgets.QMainWindow):
             nonlocal row
             nonlocal column
             nonlocal self
+            print(self.game.counterAvailableFields)
             if self.game.changeField(row, column):
                 self.changePixMapFieldBoard('board_{}{}'.format(row, column), '{}_template.png'.format(self.game.currentRound))
                 if self.game.checkWin():
-                    winDialog = WinMessageBox(self)
-                    winDialog.ui.label.setText(winDialog.ui.label.text().format(self.game.currentRound.upper()))
-                    winDialog.ui.pushButton.clicked.connect(winDialog.close)
+                    winDialog = WinMessageBox(self, self.game.currentRound.upper())
                     winDialog.show()
                     winDialog.exec()
                     self.game.resetGame()
@@ -85,7 +95,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.game.nextTurn()
                 self.changePixMapFieldBoard('current_turn', '{}_template.png'.format(self.game.currentRound))
             if self.game.counterAvailableFields == 0:
-                exit()
+                drawDialog = DrawMessageBox(self)
+                drawDialog.show()
+                drawDialog.exec()
+                self.game.resetGame()
+                for i in range(1, 4, 1):
+                    for j in range(1, 4, 1):
+                        self.changePixMapFieldBoard('board_{}{}'.format(i, j), 'blank_template.png')
         return clickedAction
     
     def changePixMapFieldBoard(self, name, newContent):
