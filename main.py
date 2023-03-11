@@ -77,6 +77,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = mainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
         self.game = Game()
+        screenSize = QtWidgets.QApplication.primaryScreen().size()
+        screenSizeList = [screenSize.width() - self.minimumWidth(), screenSize.height() - self.minimumHeight()]
+        screenSizeList = [int(i/2) for i in screenSizeList]
+        screenSizeList.append(self.minimumWidth())
+        screenSizeList.append(self.minimumHeight())
+        self.setGeometry(*screenSizeList)
         template = "self.ui.board_{}{}.mousePressEvent = self.changeContent(i, j)"
         for i in range(1, 4, 1):
             for j in range(1, 4, 1):
@@ -96,7 +102,6 @@ class MainWindow(QtWidgets.QMainWindow):
             nonlocal row
             nonlocal column
             nonlocal self
-            print(self.game.counterAvailableFields)
             if self.game.changeField(row, column):
                 self.changePixMapFieldBoard('board_{}{}'.format(row, column), '{}_template.png'.format(self.game.currentRound))
                 if self.game.checkWin():
