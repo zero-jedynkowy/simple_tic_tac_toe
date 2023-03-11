@@ -1,4 +1,5 @@
 from interface import Ui_MainWindow
+from win_message import Ui_Dialog
 import sys
 import random
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -42,7 +43,13 @@ class Game():
         if  temporary2 == 'xxx' or temporary2 == 'ooo':
             return True
         return False
-        
+
+class WinMessageBox(QtWidgets.QDialog):
+    def __init__(self, parent):
+        super(WinMessageBox, self).__init__(parent)
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+
 class MainWindow(QtWidgets.QMainWindow):
     
     def __init__(self):
@@ -64,7 +71,15 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.game.changeField(row, column):
                 self.changePixMapFieldBoard('board_{}{}'.format(row, column), '{}_template.png'.format(self.game.currentRound))
                 if self.game.checkWin():
-                    exit()
+                    winDialog = WinMessageBox(self)
+                    winDialog.ui.label.setText(winDialog.ui.label.text().format(self.game.currentRound.upper()))
+                    winDialog.ui.pushButton.clicked.connect(winDialog.close)
+                    winDialog.show()
+                    winDialog.exec()
+                    self.game.resetGame()
+                    for i in range(1, 4, 1):
+                        for j in range(1, 4, 1):
+                            self.changePixMapFieldBoard('board_{}{}'.format(i, j), 'blank_template.png')
                 self.game.nextTurn()
                 self.changePixMapFieldBoard('current_turn', '{}_template.png'.format(self.game.currentRound))
         return clickedAction
