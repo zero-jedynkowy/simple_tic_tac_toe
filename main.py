@@ -55,7 +55,13 @@ class AboutMessageBox(QtWidgets.QDialog):
         self.ui = about_message.Ui_Dialog()
         self.ui.setupUi(self)
         AboutMessageBox.counterInstances += 1
+        self.ui.label.mouseDoubleClickEvent = self.openSite()
 
+    def openSite(self):
+        def fun(event):
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl('https://google.com'))
+        return fun
+        
     def show(self) -> None:
         if AboutMessageBox.counterInstances == 1:
             return super().show()
@@ -177,5 +183,4 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
-    print(window.children())
     sys.exit(app.exec())
