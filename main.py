@@ -62,7 +62,7 @@ class AboutMessageBox(QtWidgets.QDialog):
             QtGui.QDesktopServices.openUrl(QtCore.QUrl('https://google.com'))
         return fun
         
-    def show(self) -> None:
+    def show(self):
         if AboutMessageBox.counterInstances == 1:
             return super().show()
 
@@ -71,7 +71,7 @@ class AboutMessageBox(QtWidgets.QDialog):
             return super().exec()
         self.done(0)
 
-    def done(self, a0: int) -> None:
+    def done(self, a0: int):
         AboutMessageBox.counterInstances -= 1
         super().done(a0)
 
