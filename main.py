@@ -1,7 +1,7 @@
 import tictactoe.mainWindow as mainWindow
-import tictactoe.draw_message as draw_message
-import tictactoe.win_message as win_message
-import tictactoe.about_message as about_message
+import tictactoe.drawMessage as drawMessage
+import tictactoe.winMessage as winMessage
+import tictactoe.aboutMessage as aboutMessage
 from tictactoe.gameEngine import Game
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -10,7 +10,7 @@ class AboutMessageBox(QtWidgets.QDialog):
     counterInstances = 0
     def __init__(self, parent):
         super(AboutMessageBox, self).__init__(parent)
-        self.ui = about_message.Ui_Dialog()
+        self.ui = aboutMessage.Ui_Dialog()
         self.ui.setupUi(self)
         AboutMessageBox.counterInstances += 1
         self.ui.label.mouseDoubleClickEvent = self.openSite()
@@ -37,7 +37,7 @@ class WinMessageBox(QtWidgets.QDialog):
     counterInstances = 0
     def __init__(self, parent, wonPlayer):
         super(WinMessageBox, self).__init__(parent)
-        self.ui = win_message.Ui_Dialog()
+        self.ui = winMessage.Ui_Dialog()
         self.ui.setupUi(self)
         self.ui.label.setText(self.ui.label.text().format(wonPlayer))
         self.ui.pushButton.clicked.connect(self.close)
@@ -61,7 +61,7 @@ class DrawMessageBox(QtWidgets.QDialog):
     counterInstances = 0
     def __init__(self, parent):
         super(DrawMessageBox, self).__init__(parent)
-        self.ui = draw_message.Ui_Dialog()
+        self.ui = drawMessage.Ui_Dialog()
         self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.close)
         DrawMessageBox.counterInstances += 1

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'win_message.ui'
+# Form implementation generated from reading ui file 'drawMessage.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -21,7 +21,7 @@ class Ui_Dialog(object):
         self.pushButton.setGeometry(QtCore.QRect(80, 170, 141, 81))
         self.pushButton.setObjectName("pushButton")
         self.label = QtWidgets.QLabel(Dialog)
-        self.label.setGeometry(QtCore.QRect(50, 20, 261, 131))
+        self.label.setGeometry(QtCore.QRect(100, 30, 261, 131))
         font = QtGui.QFont()
         font.setPointSize(25)
         self.label.setFont(font)
@@ -32,9 +32,9 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Player {} won!"))
+        Dialog.setWindowTitle(_translate("Dialog", "Draw!"))
         self.pushButton.setText(_translate("Dialog", "OK!"))
-        self.label.setText(_translate("Dialog", "Player {} won!"))
+        self.label.setText(_translate("Dialog", "Draw!"))
 
 
 if __name__ == "__main__":
