@@ -19,6 +19,7 @@ class Ui_Dialog(object):
         Dialog.setMaximumSize(QtCore.QSize(300, 300))
         self.pushButton = QtWidgets.QPushButton(Dialog)
         self.pushButton.setGeometry(QtCore.QRect(80, 170, 141, 81))
+        self.pushButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton.setObjectName("pushButton")
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(50, 20, 261, 131))

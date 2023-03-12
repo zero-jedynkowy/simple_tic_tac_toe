@@ -13,11 +13,12 @@ class AboutMessageBox(QtWidgets.QDialog):
         self.ui = aboutMessage.Ui_Dialog()
         self.ui.setupUi(self)
         AboutMessageBox.counterInstances += 1
-        self.ui.label.mouseDoubleClickEvent = self.openSite()
+        self.ui.label.mouseDoubleClickEvent = self.openSite(self.ui.label.property('labelLink'))
 
-    def openSite(self):
+    def openSite(self, link):
         def fun(event):
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl('https://google.com'))
+            nonlocal link
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl(link))
         return fun
         
     def show(self):

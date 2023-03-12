@@ -64,13 +64,14 @@ class Ui_Dialog(object):
         self.authorLabel_2.setOpenExternalLinks(False)
         self.authorLabel_2.setObjectName("authorLabel_2")
         self.label = QtWidgets.QLabel(Dialog)
-        self.label.setGeometry(QtCore.QRect(70, 180, 181, 41))
+        self.label.setGeometry(QtCore.QRect(20, 160, 271, 41))
         font = QtGui.QFont()
         font.setPointSize(15)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
         self.label.setFont(font)
+        self.label.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.label.setOpenExternalLinks(True)
         self.label.setObjectName("label")
 
@@ -82,7 +83,8 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "About the programme"))
         self.authorLabel.setText(_translate("Dialog", "Created by:"))
         self.authorLabel_2.setText(_translate("Dialog", "zero_jedynkowy"))
-        self.label.setText(_translate("Dialog", "My github [CLICK]"))
+        self.label.setText(_translate("Dialog", "My github [DOUBLE CLICK]"))
+        self.label.setProperty("labelLink", _translate("Dialog", "https://github.com/zero-jedynkowy"))
 
 
 if __name__ == "__main__":
