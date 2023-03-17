@@ -86,6 +86,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = mainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
         self.game = Game()
+        self.fieldsAreClickable = True
         screenSize = QtWidgets.QApplication.primaryScreen().size()
         screenSizeList = [screenSize.width() - self.minimumWidth(), screenSize.height() - self.minimumHeight()]
         screenSizeList = [int(i/2) for i in screenSizeList]
@@ -102,8 +103,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def aboutTheProgramme(self):
         def fun(event):
             aboutDialog = AboutMessageBox(self)
+            self.fieldsAreClickable = False
             aboutDialog.show()
             aboutDialog.exec()
+            if aboutDialog.close():
+                self.fieldsAreClickable = True
         return fun
     
     def changeContent(self, row, column):
@@ -111,26 +115,33 @@ class MainWindow(QtWidgets.QMainWindow):
             nonlocal row
             nonlocal column
             nonlocal self
-            if self.game.changeField(row, column):
-                self.changePixMapFieldBoard('board_{}{}'.format(row, column), '{}_template.png'.format(self.game.currentRound))
-                if self.game.checkWin():
-                    winDialog = WinMessageBox(self, self.game.currentRound.upper())
-                    winDialog.show()
-                    winDialog.exec()
+            if self.fieldsAreClickable:
+                if self.game.changeField(row, column):
+                    self.changePixMapFieldBoard('board_{}{}'.format(row, column), '{}_template.png'.format(self.game.currentRound))
+                    if self.game.checkWin():
+                        winDialog = WinMessageBox(self, self.game.currentRound.upper())
+                        self.fieldsAreClickable = False
+                        winDialog.show()
+                        winDialog.exec()
+                        if winDialog.close():
+                            self.fieldsAreClickable = True
+                        self.game.resetGame()
+                        for i in range(1, 4, 1):
+                            for j in range(1, 4, 1):
+                                self.changePixMapFieldBoard('board_{}{}'.format(i, j), 'blank_template.png')
+                    self.game.nextTurn()
+                    self.changePixMapFieldBoard('current_turn', '{}_template.png'.format(self.game.currentRound))
+                if self.game.counterAvailableFields == 0:
+                    drawDialog = DrawMessageBox(self)
+                    self.fieldsAreClickable = False
+                    drawDialog.show()
+                    drawDialog.exec()
+                    if drawDialog.close():
+                            self.fieldsAreClickable = True
                     self.game.resetGame()
                     for i in range(1, 4, 1):
                         for j in range(1, 4, 1):
                             self.changePixMapFieldBoard('board_{}{}'.format(i, j), 'blank_template.png')
-                self.game.nextTurn()
-                self.changePixMapFieldBoard('current_turn', '{}_template.png'.format(self.game.currentRound))
-            if self.game.counterAvailableFields == 0:
-                drawDialog = DrawMessageBox(self)
-                drawDialog.show()
-                drawDialog.exec()
-                self.game.resetGame()
-                for i in range(1, 4, 1):
-                    for j in range(1, 4, 1):
-                        self.changePixMapFieldBoard('board_{}{}'.format(i, j), 'blank_template.png')
         return clickedAction
     
     def changePixMapFieldBoard(self, name, newContent):
