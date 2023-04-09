@@ -50,7 +50,7 @@
      <string>TicTacToe</string>
     </property>
    </widget>
-   <widget class="QLabel" name="turn_label">
+   <widget class="QLabel" name="turnLabel">
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -68,7 +68,7 @@
      <string>Turn: </string>
     </property>
    </widget>
-   <widget class="QLabel" name="current_turn">
+   <widget class="QLabel" name="currentTurn">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -271,23 +271,6 @@
      </property>
     </widget>
    </widget>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>500</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuUstawienia">
-    <property name="title">
-     <string>About the programme</string>
-    </property>
-   </widget>
-   <addaction name="menuUstawienia"/>
   </widget>
  </widget>
  <resources/>
