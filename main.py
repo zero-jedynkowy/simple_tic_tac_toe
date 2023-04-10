@@ -65,6 +65,21 @@ class Program:
     drawWindow = 0
 
     @staticmethod
+    def loadWindow(path):
+        ui_file_name = path
+        ui_file = QFile(ui_file_name)
+        if not ui_file.open(QIODevice.ReadOnly):
+            print(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
+            sys.exit(-1)
+        loader = QUiLoader()
+        window = loader.load(ui_file)
+        ui_file.close()
+        if not window:
+            print(loader.errorString())
+            sys.exit(-1)
+        return window
+
+    @staticmethod
     def setDefaultFields():
         loadedPixMap = QPixmap("content/blank_template.png")
         boardList = Program.window.findChildren(QPushButton, QRegularExpression("board*"))
@@ -109,54 +124,11 @@ class Program:
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    ui_file_name = "content/mainWindow.ui"
-    ui_file = QFile(ui_file_name)
-    if not ui_file.open(QIODevice.ReadOnly):
-        print(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
-        sys.exit(-1)
-    loader = QUiLoader()
-    Program.window = loader.load(ui_file)
-    ui_file.close()
-    if not Program.window:
-        print(loader.errorString())
-        sys.exit(-1)
-
-    ui_file_name = "content/aboutMessage.ui"
-    ui_file = QFile(ui_file_name)
-    if not ui_file.open(QIODevice.ReadOnly):
-        print(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
-        sys.exit(-1)
-    loader = QUiLoader()
-    Program.aboutWindow = loader.load(ui_file)
-    ui_file.close()
-    if not Program.aboutWindow:
-        print(loader.errorString())
-        sys.exit(-1)
-
-    ui_file_name = "content/winMessage.ui"
-    ui_file = QFile(ui_file_name)
-    if not ui_file.open(QIODevice.ReadOnly):
-        print(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
-        sys.exit(-1)
-    loader = QUiLoader()
-    Program.winWindow = loader.load(ui_file)
-    ui_file.close()
-    if not Program.winWindow:
-        print(loader.errorString())
-        sys.exit(-1)
-
-    ui_file_name = "content/drawMessage.ui"
-    ui_file = QFile(ui_file_name)
-    if not ui_file.open(QIODevice.ReadOnly):
-        print(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
-        sys.exit(-1)
-    loader = QUiLoader()
-    Program.drawWindow = loader.load(ui_file)
-    ui_file.close()
-    if not Program.drawWindow:
-        print(loader.errorString())
-        sys.exit(-1)
-
+    Program.window = Program.loadWindow("content/mainWindow.ui")
+    Program.winWindow = Program.loadWindow("content/winMessage.ui")
+    Program.drawWindow = Program.loadWindow("content/drawMessage.ui")
+    Program.aboutWindow = Program.loadWindow("content/aboutMessage.ui")
+   
     Program.setDefaultFields()
     Program.setActions()
     Program.window.show()
