@@ -415,6 +415,20 @@
      </property>
     </widget>
    </widget>
+   <widget class="QPushButton" name="aboutProgramme">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>530</y>
+      <width>101</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>About the
+ programme</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

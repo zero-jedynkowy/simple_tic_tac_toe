@@ -3,7 +3,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtWidgets import QPushButton, QDialog
 from PySide6.QtCore import QRegularExpression
 import random
 
@@ -60,6 +60,7 @@ class Game():
 
 class Program:
     window = 0
+    aboutWindow = 0
 
     @staticmethod
     def setDefaultFields():
@@ -88,10 +89,16 @@ class Program:
         return y
 
     @staticmethod
-    def setFieldActions():
+    def aboutMessageAction():
+        QDialog.setModal(Program.aboutWindow, True)
+        Program.aboutWindow.show()
+        
+    @staticmethod
+    def setActions():
         boardList = Program.window.findChildren(QPushButton, QRegularExpression("board*"))
         for i in boardList:
             i.clicked.connect(Program.generateAction(i))
+        Program.window.aboutProgramme.clicked.connect(Program.aboutMessageAction)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -107,8 +114,20 @@ if __name__ == "__main__":
         print(loader.errorString())
         sys.exit(-1)
 
+    ui_file_name = "content/aboutMessage.ui"
+    ui_file = QFile(ui_file_name)
+    if not ui_file.open(QIODevice.ReadOnly):
+        print(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
+        sys.exit(-1)
+    loader = QUiLoader()
+    Program.aboutWindow = loader.load(ui_file)
+    ui_file.close()
+    if not Program.aboutWindow:
+        print(loader.errorString())
+        sys.exit(-1)
+
     Program.setDefaultFields()
-    Program.setFieldActions()
+    Program.setActions()
     Program.window.show()
 
     sys.exit(app.exec())
