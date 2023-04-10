@@ -3,22 +3,16 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QLabel
+from PySide6.QtWidgets import QPushButton
 from PySide6.QtCore import QRegularExpression
 import random
 
-class Program:
-    window = 0
-
-    @staticmethod
-    def setDefaultFields():
-        loadedPixMap = QPixmap("content/blank_template.png")
-        boardList = Program.window.findChildren(QLabel, QRegularExpression("board*"))
-        for i in boardList:
-            i.setPixmap(loadedPixMap)
-        Program.window.currentTurn.setPixmap(loadedPixMap)
-
 class Game():
+
+    players = ["x", "o"]
+    board = [['blank', 'blank', 'blank'] for _ in range(3)]
+    currentRound = random.choice(players)
+    counterAvailableFields = 9
 
     def setDefault():
         Game.players = ["x", "o"]
@@ -39,7 +33,7 @@ class Game():
         Game.counterAvailableFields -= 1
 
     @staticmethod
-    def changeField(self, row, column):
+    def changeField(row, column):
         row -= 1
         column -= 1
         if Game.board[row][column] == 'blank':
@@ -64,6 +58,41 @@ class Game():
             return True
         return False
 
+class Program:
+    window = 0
+
+    @staticmethod
+    def setDefaultFields():
+        loadedPixMap = QPixmap("content/blank_template.png")
+        boardList = Program.window.findChildren(QPushButton, QRegularExpression("board*"))
+        for i in boardList:
+            i.setIcon(loadedPixMap)
+        loadedPixMap = QPixmap("content/{}_template.png".format(Game.currentRound))
+        Program.window.currentTurn.setPixmap(loadedPixMap)
+
+    @staticmethod 
+    def generateAction(x):
+        number = x.objectName()
+        number = number[number.find("_") + 1:]
+        cords = list(number)
+        cords = [int(i) for i in cords]
+        def y():
+            nonlocal x
+            nonlocal cords
+            if Game.changeField(*cords):
+                loadedPixMap = QPixmap("content/{}_template.png".format(Game.currentRound))
+                x.setIcon(loadedPixMap)
+                Game.nextTurn()
+                loadedPixMap = QPixmap("content/{}_template.png".format(Game.currentRound))
+                Program.window.currentTurn.setPixmap(loadedPixMap)
+        return y
+
+    @staticmethod
+    def setFieldActions():
+        boardList = Program.window.findChildren(QPushButton, QRegularExpression("board*"))
+        for i in boardList:
+            i.clicked.connect(Program.generateAction(i))
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ui_file_name = "content/mainWindow.ui"
@@ -79,6 +108,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     Program.setDefaultFields()
+    Program.setFieldActions()
     Program.window.show()
 
     sys.exit(app.exec())
