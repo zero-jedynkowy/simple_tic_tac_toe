@@ -99,7 +99,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QPushButton" name="board_33">
+    <widget class="QPushButton" name="board_32">
      <property name="geometry">
       <rect>
        <x>120</x>
@@ -134,7 +134,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="board_23">
+    <widget class="QPushButton" name="board_22">
      <property name="geometry">
       <rect>
        <x>120</x>
@@ -169,7 +169,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="board_22">
+    <widget class="QPushButton" name="board_21">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -309,7 +309,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="board_31">
+    <widget class="QPushButton" name="board_33">
      <property name="geometry">
       <rect>
        <x>220</x>
@@ -344,7 +344,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="board_32">
+    <widget class="QPushButton" name="board_31">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -379,7 +379,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="board_21">
+    <widget class="QPushButton" name="board_23">
      <property name="geometry">
       <rect>
        <x>220</x>

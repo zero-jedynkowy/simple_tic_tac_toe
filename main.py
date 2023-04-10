@@ -61,6 +61,8 @@ class Game():
 class Program:
     window = 0
     aboutWindow = 0
+    winWindow = 0
+    drawWindow = 0
 
     @staticmethod
     def setDefaultFields():
@@ -83,9 +85,14 @@ class Program:
             if Game.changeField(*cords):
                 loadedPixMap = QPixmap("content/{}_template.png".format(Game.currentRound))
                 x.setIcon(loadedPixMap)
-                Game.nextTurn()
-                loadedPixMap = QPixmap("content/{}_template.png".format(Game.currentRound))
-                Program.window.currentTurn.setPixmap(loadedPixMap)
+                if Game.checkWin():
+                    QDialog.setModal(Program.winWindow, True)
+                    print(Program.winWindow)
+                    Program.winWindow.show()
+                else:
+                    Game.nextTurn()
+                    loadedPixMap = QPixmap("content/{}_template.png".format(Game.currentRound))
+                    Program.window.currentTurn.setPixmap(loadedPixMap)
         return y
 
     @staticmethod
@@ -123,6 +130,30 @@ if __name__ == "__main__":
     Program.aboutWindow = loader.load(ui_file)
     ui_file.close()
     if not Program.aboutWindow:
+        print(loader.errorString())
+        sys.exit(-1)
+
+    ui_file_name = "content/winMessage.ui"
+    ui_file = QFile(ui_file_name)
+    if not ui_file.open(QIODevice.ReadOnly):
+        print(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
+        sys.exit(-1)
+    loader = QUiLoader()
+    Program.winWindow = loader.load(ui_file)
+    ui_file.close()
+    if not Program.winWindow:
+        print(loader.errorString())
+        sys.exit(-1)
+
+    ui_file_name = "content/drawMessage.ui"
+    ui_file = QFile(ui_file_name)
+    if not ui_file.open(QIODevice.ReadOnly):
+        print(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
+        sys.exit(-1)
+    loader = QUiLoader()
+    Program.drawWindow = loader.load(ui_file)
+    ui_file.close()
+    if not Program.drawWindow:
         print(loader.errorString())
         sys.exit(-1)
 
