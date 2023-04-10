@@ -67,6 +67,15 @@ class Program:
     winDefaultString = 0
 
     @staticmethod
+    def positionWindowCentering(window):
+        screenSize = QApplication.primaryScreen().size()
+        screenSizeList = [screenSize.width() - window.minimumWidth(), screenSize.height() - window.minimumHeight()]
+        screenSizeList = [int(i/2) for i in screenSizeList]
+        screenSizeList.append(window.minimumWidth())
+        screenSizeList.append(window.minimumHeight())
+        window.setGeometry(*screenSizeList)
+
+    @staticmethod
     def loadWindow(path):
         ui_file_name = path
         ui_file = QFile(ui_file_name)
@@ -107,6 +116,7 @@ class Program:
                     newWinner = Program.winDefaultString.format(Game.currentRound.upper())
                     Program.winWindow.label.setText(newWinner)
                     Program.winWindow.setWindowTitle(newWinner)
+                    Program.positionWindowCentering(Program.winWindow)
                     Program.winWindow.show()
                     Program.winWindow.exec()
                     Game.setDefault()
@@ -115,6 +125,7 @@ class Program:
                     QDialog.setModal(Program.drawWindow, True)
                     Program.drawWindow.show()
                     Program.drawWindow.exec()
+                    Program.positionWindowCentering(Program.drawWindow)
                     Game.setDefault()
                     Program.setDefaultFields()
                 else:
@@ -126,6 +137,7 @@ class Program:
     @staticmethod
     def aboutMessageButtonAction():
         QDialog.setModal(Program.aboutWindow, True)
+        Program.positionWindowCentering(Program.aboutWindow)
         Program.aboutWindow.show()
 
     @staticmethod
@@ -145,7 +157,7 @@ if __name__ == "__main__":
     Program.winWindow = Program.loadWindow("content/winMessage.ui")
     Program.drawWindow = Program.loadWindow("content/drawMessage.ui")
     Program.aboutWindow = Program.loadWindow("content/aboutMessage.ui")
-    
+    Program.positionWindowCentering(Program.window)
     Program.winDefaultString = Program.winWindow.label.text()
 
     Program.setDefaultFields()
