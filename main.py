@@ -59,10 +59,12 @@ class Game():
         return False
 
 class Program:
+    
     window = 0
     aboutWindow = 0
     winWindow = 0
     drawWindow = 0
+    winDefaultString = 0
 
     @staticmethod
     def loadWindow(path):
@@ -102,8 +104,19 @@ class Program:
                 x.setIcon(loadedPixMap)
                 if Game.checkWin():
                     QDialog.setModal(Program.winWindow, True)
-                    print(Program.winWindow)
+                    newWinner = Program.winDefaultString.format(Game.currentRound.upper())
+                    Program.winWindow.label.setText(newWinner)
+                    Program.winWindow.setWindowTitle(newWinner)
                     Program.winWindow.show()
+                    Program.winWindow.exec()
+                    Game.setDefault()
+                    Program.setDefaultFields()
+                elif Game.counterAvailableFields == 1:
+                    QDialog.setModal(Program.drawWindow, True)
+                    Program.drawWindow.show()
+                    Program.drawWindow.exec()
+                    Game.setDefault()
+                    Program.setDefaultFields()
                 else:
                     Game.nextTurn()
                     loadedPixMap = QPixmap("content/{}_template.png".format(Game.currentRound))
@@ -111,26 +124,32 @@ class Program:
         return y
 
     @staticmethod
-    def aboutMessageAction():
+    def aboutMessageButtonAction():
         QDialog.setModal(Program.aboutWindow, True)
         Program.aboutWindow.show()
-        
+
     @staticmethod
     def setActions():
         boardList = Program.window.findChildren(QPushButton, QRegularExpression("board*"))
         for i in boardList:
             i.clicked.connect(Program.generateAction(i))
-        Program.window.aboutProgramme.clicked.connect(Program.aboutMessageAction)
+        Program.window.aboutProgramme.clicked.connect(Program.aboutMessageButtonAction)
+        Program.winWindow.pushButton.clicked.connect(Program.winWindow.close)
+        Program.drawWindow.pushButton.clicked.connect(Program.drawWindow.close)
 
 if __name__ == "__main__":
+   
     app = QApplication(sys.argv)
+    
     Program.window = Program.loadWindow("content/mainWindow.ui")
     Program.winWindow = Program.loadWindow("content/winMessage.ui")
     Program.drawWindow = Program.loadWindow("content/drawMessage.ui")
     Program.aboutWindow = Program.loadWindow("content/aboutMessage.ui")
-   
+    
+    Program.winDefaultString = Program.winWindow.label.text()
+
     Program.setDefaultFields()
     Program.setActions()
+    
     Program.window.show()
-
     sys.exit(app.exec())
